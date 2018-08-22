@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+    db:
+        image: postgres
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_USER=okr-manager
+            - POSTGRES_PASSWORD=okr-manager
+            - POSTGRES_DB=okr-manager
+        networks:
+            - db
+
+    adminer:
+        image: adminer
+        ports:
+            - 2000:8080
+        networks:
+            - db
+
+networks:
+    db:
+        driver: bridge
