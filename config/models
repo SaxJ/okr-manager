@@ -16,3 +16,27 @@ Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived
     userId UserId Maybe
     deriving Eq
     deriving Show
+Team
+    name Text
+    description Text Maybe
+    parent TeamId Maybe
+    UniqueName name
+TeamOwner
+    name Text
+    description Text Maybe
+    userId UserId
+    teamId TeamId
+TeamMember
+    name Text
+    description Text Maybe
+    userId UserId
+    teamId TeamId
+Objective
+    name Text
+    description Text
+    teamId TeamId
+Result
+    name Text
+    description Text
+    done Bool
+    objectiveId ObjectiveId
