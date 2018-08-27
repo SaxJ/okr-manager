@@ -16,26 +16,26 @@ Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived
     userId UserId Maybe
     deriving Eq
     deriving Show
-Team
+Team json
     name Text
     description Text Maybe
     parent TeamId Maybe
     UniqueName name
-TeamOwner
+TeamOwner json
     name Text
     description Text Maybe
     userId UserId
     teamId TeamId
-TeamMember
+TeamMember json
     name Text
     description Text Maybe
     userId UserId
     teamId TeamId
-Objective
+Objective json
     name Text
     description Text
     teamId TeamId
-Result
+Result json
     name Text
     description Text
     done Bool

@@ -12,3 +12,11 @@
 /comments CommentR POST
 
 /profile ProfileR GET
+
+/teams TeamsR GET POST
+/teams/#TeamId TeamR GET
+--/teams/#teamId/objectives TeamObjectivesR GET
+
+--/objectives ObjectivesR GET POST
+--/objectives/#objectiveId ObjectiveR GET
+--/objectives/#objectiveId/results ResultsR GET POST
