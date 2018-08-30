@@ -168,6 +168,8 @@ instance Yesod App where
     isAuthorized (StaticR _) _ = return Authorized
     isAuthorized TeamsR _ = return Authorized
     isAuthorized (TeamR _) _ = return Authorized
+    isAuthorized (TeamObjectivesR _) _ = return Authorized
+    isAuthorized ObjectivesR _ = return Authorized
 
     -- the profile route requires that the user is authenticated, so we
     -- delegate to that function

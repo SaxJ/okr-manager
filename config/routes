@@ -15,8 +15,8 @@
 
 /teams TeamsR GET POST
 /teams/#TeamId TeamR GET
---/teams/#teamId/objectives TeamObjectivesR GET
+/teams/#TeamId/objectives TeamObjectivesR GET
 
---/objectives ObjectivesR GET POST
---/objectives/#objectiveId ObjectiveR GET
---/objectives/#objectiveId/results ResultsR GET POST
+/objectives ObjectivesR GET POST
+/objectives/#ObjectiveId ObjectiveR GET
+/objectives/#ObjectiveId/results ResultsR GET POST

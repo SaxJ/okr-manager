@@ -15,5 +15,10 @@ postTeamsR = do
 
 getTeamR :: TeamId -> Handler Value
 getTeamR teamId = do
-    team <- runDB $ get teamId
+    team <- runDB $ get404 teamId
     returnJson team
+
+getTeamObjectivesR :: TeamId -> Handler Value
+getTeamObjectivesR teamId = do
+    objectives <- runDB $ selectList [ObjectiveTeamId ==. teamId] []
+    returnJson (objectives :: [Entity Objective])
