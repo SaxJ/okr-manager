@@ -4,6 +4,7 @@ import Import
 
 getTeamsR :: Handler Value
 getTeamsR = do
+    addHeader (pack "Access-Control-Allow-Origin") (pack "*")
     allComments <- runDB $ selectList [] [Asc TeamId]
     returnJson allComments
 
