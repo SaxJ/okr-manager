@@ -20,6 +20,7 @@ getObjectiveR objectiveId = do
 
 getResultsR :: ObjectiveId -> Handler Value
 getResultsR objectiveId = do
+    addHeader (pack "Access-Control-Allow-Origin") (pack "*")
     results <- runDB $ selectList [ResultObjectiveId ==. objectiveId] []
     returnJson results
 
