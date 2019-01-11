@@ -20,3 +20,5 @@
 /objectives ObjectivesR GET POST
 /objectives/#ObjectiveId ObjectiveR GET
 /objectives/#ObjectiveId/results ResultsR GET POST
+
+/user/objectives EditableR GET POST
