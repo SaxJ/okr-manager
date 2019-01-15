@@ -1,13 +1,14 @@
 <div .ui.container>
     $forall (team, group) <- paired
-        <h2 .teamName>
-            #{teamName $ entityVal team}
-            <span .teamDescription>#{fromJust $ teamDescription $ entityVal team}
-        <ul .teamObjectives>
-            $forall (o, rs) <- group
-                <li>
-                    #{objectiveName $ entityVal o}
-                    <meter>
-                    <ul>
-                        $forall r <- rs
-                            <li>#{resultName $ entityVal r}
+        <div .teamBlock>
+            <h2 .teamName>
+                #{teamName $ entityVal team}
+                <span .teamDescription>#{fromJust $ teamDescription $ entityVal team}
+            <ul .teamObjectives.hidden>
+                $forall (o, rs) <- group
+                    <li>
+                        #{objectiveName $ entityVal o}
+                        <meter>
+                        <ul>
+                            $forall r <- rs
+                                <li>#{resultName $ entityVal r}
