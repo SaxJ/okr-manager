@@ -7,8 +7,9 @@
             <ul .teamObjectives.hidden>
                 $forall (o, rs) <- group
                     <li>
-                        #{objectiveName $ entityVal o}
-                        <meter>
+                        <div .objectiveTitle>
+                            #{objectiveName $ entityVal o}
+                            <meter>
                         <ul>
                             $forall r <- rs
                                 <li>#{resultName $ entityVal r}
