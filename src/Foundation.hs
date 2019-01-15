@@ -116,6 +116,11 @@ instance Yesod App where
                     , menuItemAccessCallback = True
                     }
                 , NavbarLeft $ MenuItem
+                    { menuItemLabel = "OKRs"
+                    , menuItemRoute = OkrsR
+                    , menuItemAccessCallback = isJust muser
+                    }
+                , NavbarLeft $ MenuItem
                     { menuItemLabel = "Profile"
                     , menuItemRoute = ProfileR
                     , menuItemAccessCallback = isJust muser
@@ -170,11 +175,14 @@ instance Yesod App where
     isAuthorized (TeamR _) _ = return Authorized
     isAuthorized (TeamObjectivesR _) _ = return Authorized
     isAuthorized ObjectivesR _ = return Authorized
-    isAuthorized _ _ = return Authorized
+    isAuthorized (ObjectiveR _) _ = return Authorized
+    isAuthorized (ResultsR _) _ = return Authorized
+    isAuthorized EditableR _ = return Authorized
 
     -- the profile route requires that the user is authenticated, so we
     -- delegate to that function
     isAuthorized ProfileR _ = isAuthenticated
+    isAuthorized OkrsR _ = isAuthenticated
 
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows

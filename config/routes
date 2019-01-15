@@ -13,6 +13,8 @@
 
 /profile ProfileR GET
 
+/okrs OkrsR GET
+
 /teams TeamsR GET POST
 /teams/#TeamId TeamR GET
 /teams/#TeamId/objectives TeamObjectivesR GET

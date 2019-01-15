@@ -1,0 +1,20 @@
+.teamName {
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.teamObjectives > li {
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.teamDescription {
+    font-weight: 300;
+    font-size: 18px;
+}
+
+meter {
+    float: right;
+    width: 20%;
+}
