@@ -7,7 +7,6 @@
 .teamObjectives > li {
     font-weight: 700;
     font-size: 20px;
-    background-color: #ecf0f1;
 }
 
 .teamDescription {
@@ -18,4 +17,10 @@
 meter {
     float: right;
     width: 20%;
+}
+
+.objectiveTitle {
+    background-color: #ecf0f1;
+    border-radius: 5px;
+    padding: 8px;
 }
