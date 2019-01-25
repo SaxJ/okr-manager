@@ -1,10 +1,17 @@
 <div .ui.container>
-
-    <h1>
-      Access granted!
-
-    <p>
-      This page is protected and access is allowed only for authenticated users.
-
-    <p>
-      Your data is protected with us <strong><span class="username">#{userIdent user}</span></strong>!
+    <h1>#{userIdent user}'s OKRs
+    $forall (team, group) <- paired
+        <div .teamBlock>
+            <h2 .teamName>
+                <a>
+                    #{teamName $ entityVal team}
+                    <span .teamDescription>#{fromJust $ teamDescription $ entityVal team}
+            <ul .teamObjectives.hidden>
+                $forall (o, rs) <- group
+                    <li>
+                        <div .objectiveTitle>
+                            #{objectiveName $ entityVal o}
+                            <meter>
+                        <ul>
+                            $forall r <- rs
+                                <li>#{resultName $ entityVal r}

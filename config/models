@@ -40,3 +40,6 @@ Result json
     description Text
     done Bool
     objectiveId ObjectiveId
+ObjectiveLink json
+    from ObjectiveId
+    to ObjectiveId
