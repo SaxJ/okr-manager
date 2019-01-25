@@ -4,6 +4,10 @@
     border-bottom: 1px solid #ecf0f1;
 }
 
+.teamName > a {
+    color: black;
+}
+
 .teamObjectives > li {
     font-weight: 700;
     font-size: 20px;

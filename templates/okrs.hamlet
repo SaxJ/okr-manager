@@ -2,8 +2,9 @@
     $forall (team, group) <- paired
         <div .teamBlock>
             <h2 .teamName>
-                #{teamName $ entityVal team}
-                <span .teamDescription>#{fromJust $ teamDescription $ entityVal team}
+                <a>
+                    #{teamName $ entityVal team}
+                    <span .teamDescription>#{fromJust $ teamDescription $ entityVal team}
             <ul .teamObjectives.hidden>
                 $forall (o, rs) <- group
                     <li>
