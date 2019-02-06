@@ -10,11 +10,15 @@ import Data.Maybe (fromJust)
 
 getProfileR :: Handler Html
 getProfileR = do
-    (_, user) <- requireAuthPair
+    (userId, user) <- requireAuthPair
 
-    objectives <- runDB $ selectList [] [Asc ObjectiveId, Asc ObjectiveTeamId]
-    teams <- runDB $ selectList [] [Asc TeamId]
-    results <- runDB $ selectList [] [Asc ResultId]
+    ownerships <- runDB $ selectList [TeamOwnerUserId ==. userId] []
+
+    let ownedTeamIds = map (\o -> teamOwnerTeamId $ entityVal o) ownerships
+    teams <- runDB $ selectList [TeamId <-. ownedTeamIds] [Asc TeamId]
+
+    objectives <- runDB $ selectList [ObjectiveTeamId <-. ownedTeamIds] [Asc ObjectiveId, Asc ObjectiveTeamId]
+    results <- runDB $ selectList [ResultObjectiveId <-. ((\o -> entityKey o) <$> objectives)] [Asc ResultId]
 
     let groupToTeam = \team obj -> (entityKey team) == (objectiveTeamId $ entityVal obj)
     let groupResults obj = (obj, rs) where rs = [r | r <- results, (resultObjectiveId $ entityVal r) == (entityKey obj)]

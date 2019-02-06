@@ -1,7 +1,6 @@
 module Handler.User where
 
 import Import
-import Database.Persist.Types (PersistValue(PersistInt64), Key)
 
 getEditableR :: Handler Value
 getEditableR = do
