@@ -15,3 +15,12 @@
                         <ul>
                             $forall r <- rs
                                 <li>#{resultName $ entityVal r}
+                            <li>
+                                + Add result
+                <li>
+                    <form $create-obj-form>
+                        <div .objectiveTitle>
+                            <span .createObjectiveLink>
+                                + Create an objective
+                            <span .createObjectiveBox>
+                                <input type="text">
