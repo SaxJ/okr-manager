@@ -28,3 +28,7 @@ meter {
     border-radius: 5px;
     padding: 8px;
 }
+
+.createLink {
+    cursor: pointer;
+}

@@ -16,11 +16,17 @@
                             $forall r <- rs
                                 <li>#{resultName $ entityVal r}
                             <li>
-                                + Add result
+                                <form #create-result-form>
+                                    <span .createLink>
+                                        + Add result
+                                    <span .createBox.hidden>
+                                        <input type="text" placeholder="Stuff in here">
+                                        <input type="submit">
                 <li>
-                    <form $create-obj-form>
+                    <form #create-obj-form>
                         <div .objectiveTitle>
-                            <span .createObjectiveLink>
+                            <span .createLink>
                                 + Create an objective
-                            <span .createObjectiveBox>
-                                <input type="text">
+                            <span .createBox.hidden>
+                                <input type="text" placeholder="Stuff in here">
+                                <input type="submit">
