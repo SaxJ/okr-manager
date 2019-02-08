@@ -3,6 +3,7 @@
 
 User json
     ident Text
+    admin Bool default=false
     password Text Maybe
     UniqueUser ident
     deriving Typeable

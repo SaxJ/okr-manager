@@ -29,34 +29,27 @@ $(function() {
     event.currentTarget.classList.add('hidden');
   });
 
-  $("##{rawJS commentFormId}").submit(function(event) {
+  $("#create-objective-form").submit(function(event) {
     event.preventDefault();
+    var baseElem = event.currentTarget.parentElement;
 
-    var message = $("##{rawJS commentTextareaId}").val();
+    var name = baseElem.querySelector('.createBox #team-name').value;
+
     // (Browsers that enforce the "required" attribute on the textarea won't see this alert)
-    if (!message) {
-      alert("Please fill out the comment form first.");
-      return;
-    }
-
-    // Make an AJAX request to the server to create a new comment
     $.ajax({
-      url: '@{CommentR}',
+      url: event.currentTarget.action,
       type: 'POST',
       contentType: "application/json",
       data: JSON.stringify({
-        message: message,
+        name: name,
+        description: ''
       }),
       success: function (data) {
-        var newNode = $("<li></li>");
-        newNode.text(data.message);
-        console.log(data);
-        $("##{rawJS commentListId}").append(newNode);
+        return true;
       },
       error: function (data) {
-        console.log("Error creating comment: " + data);
+        console.log("Error creating objective: " + data);
       },
     });
-
   });
 });

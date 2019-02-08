@@ -23,10 +23,10 @@
                                         <input type="text" placeholder="Stuff in here">
                                         <input type="submit">
                 <li>
-                    <form #create-obj-form>
+                    <form #create-objective-form action="@{TeamObjectivesR $ entityKey team}">
                         <div .objectiveTitle>
                             <span .createLink>
                                 + Create an objective
                             <span .createBox.hidden>
-                                <input type="text" placeholder="Stuff in here">
+                                <input type="text" #team-name placeholder="Stuff in here">
                                 <input type="submit">
