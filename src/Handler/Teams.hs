@@ -1,6 +1,7 @@
 module Handler.Teams where
 
 import Import
+import Database.Persist.Sql (fromSqlKey)
 
 getTeamsR :: Handler Value
 getTeamsR = do
@@ -24,7 +25,9 @@ getTeamObjectivesR teamId = do
     returnJson (objectives :: [Entity Objective])
 
 postTeamObjectivesR :: TeamId -> Handler Value
-postTeamObjectivesR teamId = do
+postTeamObjectivesR team = do
     objective <- (requireJsonBody :: Handler Objective)
-    inserted <- runDB $ insertEntity objective
-    returnJson inserted
+    let updatedObjective = objective {teamId = team}
+    objectiveId <- runDB $ insert updatedObjective
+    runDB $ update objectiveId [ObjectiveTeamId =. team]
+    returnJson objective
