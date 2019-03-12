@@ -1,7 +1,6 @@
 module Handler.Teams where
 
 import Import
-import Database.Persist.Sql (fromSqlKey)
 
 getTeamsR :: Handler Value
 getTeamsR = do
@@ -27,7 +26,6 @@ getTeamObjectivesR teamId = do
 postTeamObjectivesR :: TeamId -> Handler Value
 postTeamObjectivesR team = do
     objective <- (requireJsonBody :: Handler Objective)
-    let updatedObjective = objective {teamId = team}
-    objectiveId <- runDB $ insert updatedObjective
+    objectiveId <- runDB $ insert objective
     runDB $ update objectiveId [ObjectiveTeamId =. team]
     returnJson objective
