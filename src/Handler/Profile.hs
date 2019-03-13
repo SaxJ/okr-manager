@@ -7,6 +7,7 @@ module Handler.Profile where
 
 import Import
 import Data.Maybe (fromJust)
+import Database.Persist.Sql (fromSqlKey)
 
 getProfileR :: Handler Html
 getProfileR = do

@@ -16,11 +16,13 @@
                             $forall r <- rs
                                 <li>#{resultName $ entityVal r}
                             <li>
-                                <form #create-result-form>
+                                <form #create-result-form action="@{ResultsR $ entityKey o}">
                                     <span .createLink>
                                         + Add result
                                     <span .createBox.hidden>
-                                        <input type="text" placeholder="Stuff in here">
+                                        <input type="hidden" #objective-id value="#{fromSqlKey $ entityKey o}">
+                                        <input type="text" #result-name placeholder="Name">
+                                        <input type="text" #result-description placeholder="Description">
                                         <input type="submit">
                 <li>
                     <form #create-objective-form action="@{TeamObjectivesR $ entityKey team}">
@@ -28,5 +30,6 @@
                             <span .createLink>
                                 + Create an objective
                             <span .createBox.hidden>
+                                <input type="hidden" #team-id value="#{fromSqlKey $ entityKey $ team}">
                                 <input type="text" #team-name placeholder="Stuff in here">
                                 <input type="submit">

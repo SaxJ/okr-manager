@@ -34,6 +34,7 @@ $(function() {
     var baseElem = event.currentTarget.parentElement;
 
     var name = baseElem.querySelector('.createBox #team-name').value;
+    var teamId = parseInt(baseElem.querySelector('.createBox #team-id').value);
 
     $.ajax({
       url: event.currentTarget.action,
@@ -42,7 +43,34 @@ $(function() {
       data: JSON.stringify({
         name: name,
         description: '',
-        teamId: 0
+        teamId: teamId
+      }),
+      success: function (data) {
+        return true;
+      },
+      error: function (data) {
+        console.log("Error creating objective: " + data);
+      },
+    });
+  });
+
+  $("#create-result-form").submit(function(event) {
+    event.preventDefault();
+    var baseElem = event.currentTarget.parentElement;
+
+    var name = baseElem.querySelector('.createBox #result-name').value;
+    var description = baseElem.querySelector('.createBox #result-description').value;
+    var objectiveId = parseInt(baseElem.querySelector('.createBox #objective-id').value);
+
+    $.ajax({
+      url: event.currentTarget.action,
+      type: 'POST',
+      contentType: "application/json",
+      data: JSON.stringify({
+        name: name,
+        description: description,
+        objectiveId: objectiveId,
+        done: false
       }),
       success: function (data) {
         return true;
