@@ -22,6 +22,7 @@ Team json
     description Text Maybe
     parent TeamId Maybe
     UniqueName name
+    deriving Eq
 TeamOwner json
     name Text
     description Text Maybe

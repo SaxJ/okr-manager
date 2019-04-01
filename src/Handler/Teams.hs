@@ -4,8 +4,8 @@ import Import
 
 getTeamsR :: Handler Value
 getTeamsR = do
-    allComments <- runDB $ selectList [] [Asc TeamId]
-    returnJson allComments
+    allTeams <- runDB $ selectList [] [Asc TeamId]
+    returnJson allTeams
 
 postTeamsR :: Handler Value
 postTeamsR = do
