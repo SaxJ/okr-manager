@@ -126,6 +126,13 @@ instance Yesod App where
                     , menuItemAccessCallback = isJust muser
                     }
                 , NavbarRight $ MenuItem
+                    { menuItemLabel = "Admin"
+                    , menuItemRoute = AdminR
+                    , menuItemAccessCallback = case muser of
+                        Nothing -> False
+                        Just (_, user) -> userAdmin user
+                    }
+                , NavbarRight $ MenuItem
                     { menuItemLabel = "Login"
                     , menuItemRoute = AuthR LoginR
                     , menuItemAccessCallback = isNothing muser
@@ -183,6 +190,7 @@ instance Yesod App where
     -- delegate to that function
     isAuthorized ProfileR _ = isAuthenticated
     isAuthorized OkrsR _ = isAuthenticated
+    isAuthorized AdminR _ = isAuthedAsAdmin
 
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows
@@ -283,6 +291,13 @@ isAuthenticated = do
     return $ case muid of
         Nothing -> Unauthorized "You must login to access this page"
         Just _ -> Authorized
+
+isAuthedAsAdmin :: Handler AuthResult
+isAuthedAsAdmin = do
+    mUser <- maybeAuth
+    return $ case mUser of
+        Nothing -> Unauthorized "You must login to access this page"
+        Just (Entity _ user) -> if userAdmin user then Authorized else Unauthorized "You must be admin"
 
 instance YesodAuthPersist App
 
