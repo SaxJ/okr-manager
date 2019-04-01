@@ -10,7 +10,7 @@ import Import
 import Text.Julius (RawJS (..))
 import Yesod.Form.Bootstrap3
 import Data.Text as DT
-import Data.Maybe (fromJust)
+import Data.Maybe (fromMaybe)
 
 data TeamForm = TeamForm
     { teamName' :: Text
@@ -34,7 +34,7 @@ getAdminR = do
     case result of
         FormSuccess formInput -> do
             let ent = Team (teamName' formInput) (teamDescription' formInput) (entityKey <$> parent' formInput)
-            runDB $ insertEntity ent
+            runDB $ insertUnique ent
             return ()
         _ -> return ()
 

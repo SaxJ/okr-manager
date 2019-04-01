@@ -1,48 +1,18 @@
 <div .ui.container>
     <h1>Admin
-    <ul>
+    <ul .list-group.list-group-flush #team-list>
         $forall team <- allTeams
-            <li>
-                #{teamName $ entityVal team}
+            <li .list-group-item.container-fluid>
+                <form method=delete action=@{AdminR} enctype=#{formEnctype}>
+                    <input type="hidden" value="#{fromSqlKey $ entityKey team}">
+                    <button type="submit" class="close" aria-label="Close" style="color: red;">
+                        <span aria-hidden="true">&times;</span>
+                <div .card>
+                    <h3 .card-title>
+                        #{teamName $ entityVal team}
+                    <p .card-body>
+                        #{fromMaybe "" $ teamDescription $ entityVal team}
         <form .form-horizontal method=post action=@{AdminR} enctype=#{formEnctype}>
             ^{formWidget}
             <button .btn.btn-primary type="submit">
                 Create Team
-
-<!--
-<div .ui.container>
-    <h1>#{userIdent user}'s OKRs
-    $forall (team, group) <- paired
-        <div .teamBlock>
-            <h2 .teamName>
-                <a>
-                    #{teamName $ entityVal team}
-                    <span .teamDescription>#{fromJust $ teamDescription $ entityVal team}
-            <ul .teamObjectives.hidden>
-                $forall (o, rs) <- group
-                    <li>
-                        <div .objectiveTitle>
-                            #{objectiveName $ entityVal o}
-                            <meter>
-                        <ul>
-                            $forall r <- rs
-                                <li>#{resultName $ entityVal r}
-                            <li>
-                                <form #create-result-form action="@{ResultsR $ entityKey o}">
-                                    <span .createLink>
-                                        + Add result
-                                    <span .createBox.hidden>
-                                        <input type="hidden" #objective-id value="#{fromSqlKey $ entityKey o}">
-                                        <input type="text" #result-name placeholder="Name">
-                                        <input type="text" #result-description placeholder="Description">
-                                        <input type="submit">
-                <li>
-                    <form #create-objective-form action="@{TeamObjectivesR $ entityKey team}">
-                        <div .objectiveTitle>
-                            <span .createLink>
-                                + Create an objective
-                            <span .createBox.hidden>
-                                <input type="hidden" #team-id value="#{fromSqlKey $ entityKey $ team}">
-                                <input type="text" #team-name placeholder="Stuff in here">
-                                <input type="submit">
-                                -->
