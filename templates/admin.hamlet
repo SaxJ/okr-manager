@@ -1,16 +1,7 @@
 <div .ui.container>
     <h1>Admin
-    <ul .list-group.list-group-flush #team-list>
-        $forall team <- allTeams
-            <li .list-group-item.container-fluid>
-                <span data-team="#{fromSqlKey $ entityKey team}" type="submit" class="close #{deleteFormClass}" aria-label="Close" style="color: red;">
-                    <span aria-hidden="true">&times;</span>
-                <div .card>
-                    <h3 .card-title>
-                        #{teamName $ entityVal team}
-                    <p .card-body>
-                        #{fromMaybe "" $ teamDescription $ entityVal team}
-        <form .form-horizontal method=post action=@{AdminR} enctype=#{formEnctype}>
-            ^{formWidget}
-            <button .btn.btn-primary type="submit">
-                Create Team
+    ^{treeWidget teamTree}
+    <form .form-horizontal method=post action=@{AdminR} enctype=#{formEnctype}>
+        ^{formWidget}
+        <button .btn.btn-primary type="submit">
+            Create Team

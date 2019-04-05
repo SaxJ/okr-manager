@@ -3,6 +3,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE QuasiQuotes #-}
 module Handler.Admin where
 
 import Database.Persist.Sql (fromSqlKey)
@@ -11,15 +12,38 @@ import Yesod.Form.Bootstrap3
 import Data.Maybe (fromMaybe, fromJust)
 import qualified Data.List as L
 
-data Tree = Empty | Tree Team [Tree]
+data Tree = Empty | Tree (Entity Team) [Tree]
 
 teamsToTree :: [Entity Team] -> Entity Team -> Tree
-teamsToTree teams t = Tree (entityVal t) $ map (teamsToTree teams) xs
+teamsToTree [] _ = Empty
+teamsToTree teams t = Tree t $ map (teamsToTree teams) xs
     where
-        xs = [a | a <- teams, (fromJust $ (teamParent . entityVal) a) == (entityKey t)]
+        xs = [a | a <- teams, (teamParent $ entityVal a) == (Just $ entityKey t)]
 
 deleteFormClass :: String
 deleteFormClass = "team-delete"
+
+hasChildren :: Tree -> Bool
+hasChildren (Tree _ xs) = not $ null xs
+
+treeWidget Empty = [whamlet|<h1>Nothing!|]
+treeWidget tree@(Tree tm tms) =
+    [whamlet|
+        <ul .list-group.list-group-flush #team-list>
+            <li .list-group-item.container-fluid>
+                <span data-team="#{fromSqlKey $ entityKey tm}" type="submit" class="close #{deleteFormClass}" aria-label="Close" style="color: red;">
+                    <span aria-hidden="true">&times;</span>
+                <div .card>
+                    <h3 .card-title>
+                        #{teamName $ entityVal tm}
+                    <p .card-body>
+                        #{fromMaybe "" $ teamDescription $ entityVal tm}
+            $if hasChildren tree
+                <li .list-group #team-list>
+                    <ul .list-group>
+                        $forall t <- tms
+                            ^{treeWidget t}
+    |]
 
 data TeamForm = TeamForm
     { teamName' :: Text
@@ -48,7 +72,7 @@ getAdminR = do
         _ -> return ()
 
     allTeams <- runDB $ selectList [] [Asc TeamName]
-    let teamTree = L.groupBy (\ta tb -> teamParent ta == teamParent tb) $ map entityVal allTeams
+    let teamTree = teamsToTree allTeams $ L.head $ filter (isNothing . teamParent . entityVal) allTeams
     defaultLayout $ do
         $(widgetFile "admin")
 
