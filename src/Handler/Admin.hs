@@ -7,10 +7,19 @@ module Handler.Admin where
 
 import Database.Persist.Sql (fromSqlKey)
 import Import
-import Text.Julius (RawJS (..))
 import Yesod.Form.Bootstrap3
-import Data.Text as DT
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, fromJust)
+import qualified Data.List as L
+
+data Tree = Empty | Tree Team [Tree]
+
+teamsToTree :: [Entity Team] -> Entity Team -> Tree
+teamsToTree teams t = Tree (entityVal t) $ map (teamsToTree teams) xs
+    where
+        xs = [a | a <- teams, (fromJust $ (teamParent . entityVal) a) == (entityKey t)]
+
+deleteFormClass :: String
+deleteFormClass = "team-delete"
 
 data TeamForm = TeamForm
     { teamName' :: Text
@@ -28,19 +37,26 @@ teamForm = TeamForm
 
 getAdminR :: Handler Html
 getAdminR = do
-    (userId, user) <- requireAuthPair
+    (_, _) <- requireAuthPair
     ((result, formWidget), formEnctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm teamForm
 
     case result of
         FormSuccess formInput -> do
             let ent = Team (teamName' formInput) (teamDescription' formInput) (entityKey <$> parent' formInput)
-            runDB $ insertUnique ent
+            _ <- runDB $ insertUnique ent
             return ()
         _ -> return ()
 
     allTeams <- runDB $ selectList [] [Asc TeamName]
+    let teamTree = L.groupBy (\ta tb -> teamParent ta == teamParent tb) $ map entityVal allTeams
     defaultLayout $ do
         $(widgetFile "admin")
 
 postAdminR :: Handler Html
 postAdminR = getAdminR
+
+deleteAdminTeamR :: TeamId -> Handler Value
+deleteAdminTeamR teamId = do
+    team <- runDB $ get404 teamId
+    runDB $ delete teamId
+    redirect AdminR

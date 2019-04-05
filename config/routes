@@ -14,6 +14,7 @@
 /profile ProfileR GET
 
 /admin AdminR GET POST
+/admin/team/#TeamId AdminTeamR DELETE
 
 /okrs OkrsR GET
 

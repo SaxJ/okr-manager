@@ -191,6 +191,7 @@ instance Yesod App where
     isAuthorized ProfileR _ = isAuthenticated
     isAuthorized OkrsR _ = isAuthenticated
     isAuthorized AdminR _ = isAuthedAsAdmin
+    isAuthorized (AdminTeamR _) _ = isAuthedAsAdmin
 
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows

@@ -3,10 +3,8 @@
     <ul .list-group.list-group-flush #team-list>
         $forall team <- allTeams
             <li .list-group-item.container-fluid>
-                <form method=delete action=@{AdminR} enctype=#{formEnctype}>
-                    <input type="hidden" value="#{fromSqlKey $ entityKey team}">
-                    <button type="submit" class="close" aria-label="Close" style="color: red;">
-                        <span aria-hidden="true">&times;</span>
+                <span data-team="#{fromSqlKey $ entityKey team}" type="submit" class="close #{deleteFormClass}" aria-label="Close" style="color: red;">
+                    <span aria-hidden="true">&times;</span>
                 <div .card>
                     <h3 .card-title>
                         #{teamName $ entityVal team}
