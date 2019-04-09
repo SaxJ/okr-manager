@@ -181,7 +181,6 @@ getApplicationRepl = do
 shutdownApp :: App -> IO ()
 shutdownApp _ = return ()
 
-
 ---------------------------------------------
 -- Functions for use in development with GHCi
 ---------------------------------------------

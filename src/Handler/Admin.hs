@@ -1,3 +1,4 @@
+
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
@@ -9,7 +10,7 @@ module Handler.Admin where
 import Database.Persist.Sql (fromSqlKey)
 import Import
 import Yesod.Form.Bootstrap3
-import Data.Maybe (fromMaybe, fromJust)
+import Data.Maybe (fromMaybe)
 import qualified Data.List as L
 
 data Tree = Empty | Tree (Entity Team) [Tree]
@@ -24,13 +25,14 @@ deleteFormClass :: String
 deleteFormClass = "team-delete"
 
 hasChildren :: Tree -> Bool
+hasChildren Empty = False
 hasChildren (Tree _ xs) = not $ null xs
 
 treeWidget Empty = [whamlet|<h1>Nothing!|]
 treeWidget tree@(Tree tm tms) =
     [whamlet|
-        <ul .list-group.list-group-flush #team-list>
-            <li .list-group-item.container-fluid>
+        <ul .list-group #team-list>
+            <li .list-group-item>
                 <span data-team="#{fromSqlKey $ entityKey tm}" type="submit" class="close #{deleteFormClass}" aria-label="Close" style="color: red;">
                     <span aria-hidden="true">&times;</span>
                 <div .card>
@@ -39,7 +41,7 @@ treeWidget tree@(Tree tm tms) =
                     <p .card-body>
                         #{fromMaybe "" $ teamDescription $ entityVal tm}
             $if hasChildren tree
-                <li .list-group #team-list>
+                <li .list-group-item #team-list>
                     <ul .list-group>
                         $forall t <- tms
                             ^{treeWidget t}
@@ -81,6 +83,6 @@ postAdminR = getAdminR
 
 deleteAdminTeamR :: TeamId -> Handler Value
 deleteAdminTeamR teamId = do
-    team <- runDB $ get404 teamId
+    _ <- runDB $ get404 teamId
     runDB $ delete teamId
     redirect AdminR
