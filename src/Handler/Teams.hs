@@ -1,3 +1,9 @@
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE QuasiQuotes #-}
 module Handler.Teams where
 
 import Import
@@ -13,10 +19,14 @@ postTeamsR = do
     inserted <- runDB $ insertEntity team
     returnJson inserted
 
-getTeamR :: TeamId -> Handler Value
+getTeamR :: TeamId -> Handler Html
 getTeamR teamId = do
+    (userId, user) <- requireAuthPair
     team <- runDB $ get404 teamId
-    returnJson team
+    let teamAdmin = userAdmin
+
+    defaultLayout $ do
+        $(widgetFile "team")
 
 getTeamObjectivesR :: TeamId -> Handler Value
 getTeamObjectivesR teamId = do

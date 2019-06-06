@@ -1,4 +1,3 @@
-
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
@@ -36,10 +35,11 @@ treeWidget tree@(Tree tm tms) =
                 <span data-team="#{fromSqlKey $ entityKey tm}" type="submit" class="close #{deleteFormClass}" aria-label="Close" style="color: red;">
                     <span aria-hidden="true">&times;</span>
                 <div .card>
-                    <h3 .card-title>
-                        #{teamName $ entityVal tm}
-                    <p .card-body>
-                        #{fromMaybe "" $ teamDescription $ entityVal tm}
+                    <a href="@{TeamR $ entityKey tm}">
+                        <h3 .card-title>
+                            #{teamName $ entityVal tm}
+                        <p .card-body>
+                            #{fromMaybe "" $ teamDescription $ entityVal tm}
             $if hasChildren tree
                 <li .list-group-item #team-list>
                     <ul .list-group>
