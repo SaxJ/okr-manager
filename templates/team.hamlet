@@ -1,14 +1,21 @@
 <div .ui.container>
     <h1>#{teamName team}
-    <h3>Team Members
-    <ul .list-group>
-        $forall m <- members
-            <li .list-group-item>
-                <h3>
-                    #{teamMemberName $ entityVal m}
-                    <small>
-                        #{fromMaybe "" $  teamMemberDescription $ entityVal m}
+    <hr>
+    $if not $ null members
+        <div .card>
+            <h3>Team Members
+            <ul .list-group>
+                $forall m <- members
+                    <li .list-group-item>
+                        <span data-member="#{fromSqlKey $ entityKey m}" type="submit" class="close #{deleteFormClass}" aria-label="Close" style="color: red;">
+                            <span aria-hidden="true">&times;</span>
+                        <h5>
+                            #{teamMemberName $ entityVal m}
+                            <small>
+                                #{fromMaybe "" $  teamMemberDescription $ entityVal m}
     $if canWrite
-        <form .form-horizontal method=post>
+        <hr>
+        <form .form-horizontal method=post action=@{TeamR teamId} enctype=#{formEnctype}>
+            ^{formWidget}
             <button .btn.btn-primary type="submit">
                 Add Team Member

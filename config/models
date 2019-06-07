@@ -6,7 +6,7 @@ User json
     admin Bool default=false
     password Text Maybe
     UniqueUser ident
-    deriving Typeable
+    deriving Typeable Eq
 Email
     email Text
     userId UserId Maybe
@@ -33,6 +33,7 @@ TeamMember json
     description Text Maybe
     userId UserId
     teamId TeamId
+    UniqueMember userId teamId
 Objective json
     name Text
     description Text

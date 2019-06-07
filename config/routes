@@ -19,7 +19,7 @@
 /okrs OkrsR GET
 
 /teams TeamsR GET POST
-/teams/#TeamId TeamR GET
+/teams/#TeamId TeamR GET POST
 /teams/#TeamId/objectives TeamObjectivesR GET POST
 
 /objectives ObjectivesR GET POST
@@ -27,3 +27,4 @@
 /objectives/#ObjectiveId/results ResultsR GET POST
 
 /user/objectives EditableR GET POST
+/team_member/#TeamMemberId TeamMemberR DELETE

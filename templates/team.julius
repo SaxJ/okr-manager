@@ -1,0 +1,19 @@
+$(function() {
+  $(".member-delete").click(function(event) {
+    var memberId = event.currentTarget.dataset['member'];
+    console.log(event.currentTarget.parentElement);
+
+    // Make an AJAX request to the server to create a new comment
+    $.ajax({
+      url: '/team_member/' + memberId,
+      type: 'DELETE',
+      success: function (data) {
+        event.currentTarget.parentElement.parentElement.removeChild(event.currentTarget.parentElement);
+      },
+      error: function (data) {
+        console.log("Error: " + data);
+      }
+    });
+
+  });
+});

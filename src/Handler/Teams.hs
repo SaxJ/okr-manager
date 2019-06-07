@@ -23,18 +23,33 @@ postTeamsR = do
     inserted <- runDB $ insertEntity team
     returnJson inserted
 
+deleteFormClass :: String
+deleteFormClass = "member-delete"
+
 getTeamR :: TeamId -> Handler Html
 getTeamR teamId = do
     (userId, user) <- requireAuthPair
+    ((result, formWidget), formEnctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm teamMemberForm
     team <- runDB $ get404 teamId
 
+    case result of
+        FormSuccess formInput -> do
+            let name = fromMaybe (userIdent $ entityVal $ teamMemberUser' formInput) (teamMemberName' formInput)
+            let ent = TeamMember name (teamMemberDescription' formInput) (entityKey $ teamMemberUser' formInput) teamId
+            _ <- runDB $ insertUnique ent
+            return ()
+        _ -> return ()
+
     isMember <- isMemberOf userId teamId
-    let canWrite = userAdmin user && isMember
+    let canWrite = userAdmin user || isMember
 
     members <- runDB $ selectList [TeamMemberTeamId ==. teamId] []
 
     defaultLayout $ do
         $(widgetFile "team")
+
+postTeamR :: TeamId -> Handler Html
+postTeamR = getTeamR
 
 getTeamObjectivesR :: TeamId -> Handler Value
 getTeamObjectivesR teamId = do
@@ -65,4 +80,18 @@ teamMemberForm = TeamMemberForm
     <*> aopt textField (bfs ("Description" :: Text)) Nothing
     <*> areq (selectField userOptions) (bfs ("User" :: Text)) Nothing
     where
-        userOptions = optionsPersist [] [Asc UserIdent] userIdent
+        userOptions = optionsPersist [] [] userIdent
+
+deleteTeamMemberR :: TeamMemberId -> Handler Value
+deleteTeamMemberR memberId = do
+    (userId, user) <- requireAuthPair
+    member <- runDB $ get404 memberId
+    let teamId = teamMemberTeamId member
+    isMember <- isMemberOf userId teamId
+    let canWrite = userAdmin user || isMember
+    case canWrite of
+        True -> do
+            runDB $ delete memberId
+            redirect (TeamR teamId)
+        _ -> redirect (TeamR teamId)
+
