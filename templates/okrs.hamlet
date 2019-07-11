@@ -1,8 +1,9 @@
 <div .ui.container>
+    <h1>My OKRs
     $forall (team, group) <- paired
         <div .teamBlock>
             <h2 .teamName>
-                <a>
+                <a href=@{TeamObjectivesR $ entityKey team}>
                     #{teamName $ entityVal team}
                     <span .teamDescription>#{fromJust $ teamDescription $ entityVal team}
             <ul .teamObjectives.hidden>
