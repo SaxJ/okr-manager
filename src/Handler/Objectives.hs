@@ -1,6 +1,16 @@
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE QuasiQuotes #-}
 module Handler.Objectives where
 
+import Database.Persist.Sql (fromSqlKey)
 import Import
+import Data.Maybe (fromMaybe)
+import Yesod.Form.Bootstrap3
+import qualified Data.List as L
 
 getObjectivesR :: Handler Value
 getObjectivesR = do
@@ -24,9 +34,28 @@ getResultsR objectiveId = do
     results <- runDB $ selectList [ResultObjectiveId ==. objectiveId] []
     returnJson results
 
-postResultsR :: ObjectiveId -> Handler Value
+postResultsR :: ObjectiveId -> Handler Html
 postResultsR objId = do
-    _ <- runDB $ get404 objId
-    result <- (requireJsonBody :: Handler Result)
-    inserted <- runDB $ insertEntity result
-    returnJson inserted
+    (_, _) <- requireAuthPair
+    ((result, _), _) <- runFormPost $ renderBootstrap3 BootstrapBasicForm addResultForm
+    objective <- runDB $ get404 objId
+
+    case result of
+        FormSuccess formInput -> do
+            let ent = Result (resultName' formInput) (resultDescription' formInput) False objId
+            _ <- runDB $ insertUnique ent
+            return ()
+        _ -> return ()
+
+    redirect $ TeamR $ objectiveTeamId objective
+
+--OBJECTIVE RESULT FORM
+data AddResultForm = AddResultForm
+    { resultName' :: Text
+    , resultDescription' :: Text
+    }
+
+addResultForm :: AForm Handler AddResultForm
+addResultForm = AddResultForm
+    <$> areq textField (bfs ("Name" :: Text)) Nothing
+    <*> areq textField (bfs ("Description" :: Text)) Nothing

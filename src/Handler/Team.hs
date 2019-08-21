@@ -11,15 +11,21 @@ import Import
 import Data.Maybe (fromMaybe)
 import Yesod.Form.Bootstrap3
 import qualified Data.List as L
+import qualified Handler.Objectives as OH
 
 getTeamR :: TeamId -> Handler Html
 getTeamR teamId = do
     (userId, user) <- requireAuthPair
+
     (memberFormWidget, _) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm teamMemberForm
-    (objectiveFormWidget, enctype) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm addObjectiveForm
+    (objectiveFormWidget, _) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm addObjectiveForm
+    (addResultFormWidget, _) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm OH.addResultForm
+
     team <- runDB $ get404 teamId
-    objectives' <- runDB $ selectList [ObjectiveTeamId ==. teamId] []
-    let objectives = entityVal <$> objectives'
+    objectives <- runDB $ selectList [ObjectiveTeamId ==. teamId] []
+    results <- runDB $ selectList [ResultObjectiveId <-. ((\o -> entityKey o) <$> objectives)] [Asc ResultId]
+
+    let groupResults obj = [r | r <- results, (resultObjectiveId $ entityVal r) == (entityKey obj)]
 
     isMember <- isMemberOf userId teamId
     let isAdmin = userAdmin user || isMember
@@ -82,6 +88,7 @@ isMemberOf userId teamId = do
     members <- runDB $ selectList [TeamMemberUserId ==. userId, TeamMemberTeamId ==. teamId] []
     return $ not $ null members
 
+-- TEAM MEMBER FORM
 data TeamMemberForm = TeamMemberForm
     { teamMemberName' :: Maybe Text
     , teamMemberDescription' :: Maybe Text
@@ -96,6 +103,7 @@ teamMemberForm = TeamMemberForm
     where
         userOptions = optionsPersist [] [] userIdent
 
+-- TEAM OBJECTIVE FORM
 data AddObjectiveForm = AddObjectiveForm
     { objectiveName' :: Text
     , objectiveDescription' :: Text

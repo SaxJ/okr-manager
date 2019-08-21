@@ -8,7 +8,7 @@
                 $forall m <- members
                     <li .list-group-item>
                         <form method=post action=@{TeamMemberR $ entityKey m}?_method=DELETE>
-                            <button>
+                            <button .close>
                                 <span .close aria-label=Close style="color: red;">
                                     <span aria-hidden="true">&times;</span>
                         <h5>
@@ -18,12 +18,25 @@
             <h3>Objectives
             <ul .list-group>
                 $forall o <- objectives
-                    <li .list-group-item>
-                        #{objectiveName o}
+                    <li .list-group-item.card>
+                        <h3 .card-title>
+                            #{objectiveName $ entityVal o}
+                        <span .card-body>
+                            <p>
+                                #{objectiveDescription $ entityVal o}
+                            <ul .list-group.list-group-flush>
+                            $forall r <- groupResults o
+                                <li .list-group-item style="padding-left: 30px;">
+                                    #{resultName $ entityVal r}
+                            <li .list-group-item.hidden>
+                                <form .form-horizontal method=post action=@{ResultsR $ entityKey o}>
+                                    ^{addResultFormWidget}
+                                    <button .btn.btn-primary type="submit">
+                                        Add Key Result
 
     $if isAdmin || isMember
         <hr>
-        <form .form-horizontal method=post action=@{TeamObjectivesR teamId} enctype=#{enctype}>
+        <form .form-horizontal method=post action=@{TeamObjectivesR teamId}>
             ^{objectiveFormWidget}
             <button .btn.btn-primary type="submit">
                 Add Objective
