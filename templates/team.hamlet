@@ -13,8 +13,22 @@
                             #{teamMemberName $ entityVal m}
                             <small>
                                 #{fromMaybe "" $  teamMemberDescription $ entityVal m}
-    $if canWrite
+            <h3>Objectives
+            <ul .list-group>
+                $forall o <- objectives
+                    <li .list-group-item>
+                        #{objectiveName o}
+
+    $if isAdmin || isMember
         <hr>
+        <form .form-horizontal method=post action=@{TeamObjectivesR teamId} enctype=#{enctype}>
+            ^{objectiveFormWidget}
+            <button .btn.btn-primary type="submit">
+                Add Objective
+
+    $if isAdmin
+        <hr>
+        <h1 style="margin-top: 100px;">Admin
         <form .form-horizontal method=post action=@{TeamR teamId} enctype=#{formEnctype}>
             ^{formWidget}
             <button .btn.btn-primary type="submit">

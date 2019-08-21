@@ -30,7 +30,10 @@ getTeamR :: TeamId -> Handler Html
 getTeamR teamId = do
     (userId, user) <- requireAuthPair
     ((result, formWidget), formEnctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm teamMemberForm
+    (objectiveFormWidget, enctype) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm addObjectiveForm
     team <- runDB $ get404 teamId
+    objectives' <- runDB $ selectList [ObjectiveTeamId ==. teamId] []
+    let objectives = entityVal <$> objectives'
 
     case result of
         FormSuccess formInput -> do
@@ -41,7 +44,7 @@ getTeamR teamId = do
         _ -> return ()
 
     isMember <- isMemberOf userId teamId
-    let canWrite = userAdmin user || isMember
+    let isAdmin = userAdmin user || isMember
 
     members <- runDB $ selectList [TeamMemberTeamId ==. teamId] []
 
@@ -56,12 +59,19 @@ getTeamObjectivesR teamId = do
     objectives <- runDB $ selectList [ObjectiveTeamId ==. teamId] []
     returnJson (objectives :: [Entity Objective])
 
-postTeamObjectivesR :: TeamId -> Handler Value
-postTeamObjectivesR team = do
-    objective <- (requireJsonBody :: Handler Objective)
-    objectiveId <- runDB $ insert objective
-    runDB $ update objectiveId [ObjectiveTeamId =. team]
-    returnJson objective
+postTeamObjectivesR :: TeamId -> Handler Html
+postTeamObjectivesR teamId = do
+    (userId, user) <- requireAuthPair
+    ((result, formWidget), formEnctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm addObjectiveForm
+
+    case result of
+        FormSuccess formInput -> do
+            let ent = Objective (objectiveName' formInput) (objectiveDescription' formInput) teamId
+            _ <- runDB $ insertUnique ent
+            return ()
+        _ -> return ()
+
+    redirect $ TeamR teamId
 
 isMemberOf :: UserId  -> TeamId -> Handler Bool
 isMemberOf userId teamId = do
@@ -81,6 +91,16 @@ teamMemberForm = TeamMemberForm
     <*> areq (selectField userOptions) (bfs ("User" :: Text)) Nothing
     where
         userOptions = optionsPersist [] [] userIdent
+
+data AddObjectiveForm = AddObjectiveForm
+    { objectiveName' :: Text
+    , objectiveDescription' :: Text
+    }
+
+addObjectiveForm :: AForm Handler AddObjectiveForm
+addObjectiveForm = AddObjectiveForm
+    <$> areq textField (bfs ("Name" :: Text)) Nothing
+    <*> areq textField (bfs ("Description" :: Text)) Nothing
 
 deleteTeamMemberR :: TeamMemberId -> Handler Value
 deleteTeamMemberR memberId = do
