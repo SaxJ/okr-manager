@@ -29,19 +29,11 @@ deleteFormClass = "member-delete"
 getTeamR :: TeamId -> Handler Html
 getTeamR teamId = do
     (userId, user) <- requireAuthPair
-    ((result, formWidget), formEnctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm teamMemberForm
+    (memberFormWidget, _) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm teamMemberForm
     (objectiveFormWidget, enctype) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm addObjectiveForm
     team <- runDB $ get404 teamId
     objectives' <- runDB $ selectList [ObjectiveTeamId ==. teamId] []
     let objectives = entityVal <$> objectives'
-
-    case result of
-        FormSuccess formInput -> do
-            let name = fromMaybe (userIdent $ entityVal $ teamMemberUser' formInput) (teamMemberName' formInput)
-            let ent = TeamMember name (teamMemberDescription' formInput) (entityKey $ teamMemberUser' formInput) teamId
-            _ <- runDB $ insertUnique ent
-            return ()
-        _ -> return ()
 
     isMember <- isMemberOf userId teamId
     let isAdmin = userAdmin user || isMember
@@ -52,7 +44,19 @@ getTeamR teamId = do
         $(widgetFile "team")
 
 postTeamR :: TeamId -> Handler Html
-postTeamR = getTeamR
+postTeamR teamId = do
+    (userId, user) <- requireAuthPair
+    ((result, formWidget), formEnctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm teamMemberForm
+
+    case result of
+        FormSuccess formInput -> do
+            let name = fromMaybe (userIdent $ entityVal $ teamMemberUser' formInput) (teamMemberName' formInput)
+            let ent = TeamMember name (teamMemberDescription' formInput) (entityKey $ teamMemberUser' formInput) teamId
+            _ <- runDB $ insertUnique ent
+            return ()
+        _ -> return ()
+
+    redirect $ TeamR teamId
 
 getTeamObjectivesR :: TeamId -> Handler Value
 getTeamObjectivesR teamId = do

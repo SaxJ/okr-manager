@@ -7,8 +7,10 @@
             <ul .list-group>
                 $forall m <- members
                     <li .list-group-item>
-                        <span data-member="#{fromSqlKey $ entityKey m}" type="submit" class="close #{deleteFormClass}" aria-label="Close" style="color: red;">
-                            <span aria-hidden="true">&times;</span>
+                        <form method=post action=@{TeamMemberR $ entityKey m}?_method=DELETE>
+                            <button>
+                                <span .close aria-label=Close style="color: red;">
+                                    <span aria-hidden="true">&times;</span>
                         <h5>
                             #{teamMemberName $ entityVal m}
                             <small>
@@ -29,7 +31,7 @@
     $if isAdmin
         <hr>
         <h1 style="margin-top: 100px;">Admin
-        <form .form-horizontal method=post action=@{TeamR teamId} enctype=#{formEnctype}>
-            ^{formWidget}
+        <form .form-horizontal method=post action=@{TeamR teamId}>
+            ^{memberFormWidget}
             <button .btn.btn-primary type="submit">
                 Add Team Member
