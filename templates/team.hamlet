@@ -23,8 +23,9 @@
                             <button .close>
                                 <span .close aria-label=Close style="color: red;">
                                     <span aria-hidden="true">&times;</span>
-                        <h3 .card-title>
-                            #{objectiveName $ entityVal o}
+                        <a href=@{ObjectiveR $ entityKey o}>
+                            <h3 .card-title>
+                                #{objectiveName $ entityVal o}
                         <span .card-body>
                             <p>
                                 #{objectiveDescription $ entityVal o}
