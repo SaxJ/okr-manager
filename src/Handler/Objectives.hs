@@ -28,6 +28,18 @@ getObjectiveR objectiveId = do
     objective <- runDB $ get404 objectiveId
     returnJson objective
 
+deleteObjectiveR :: ObjectiveId -> Handler Value
+deleteObjectiveR objectiveId = do
+    (userId, user) <- requireAuthPair
+    objective <- runDB $ get404 objectiveId
+
+    members <- runDB $ selectList [TeamMemberUserId ==. userId, TeamMemberTeamId ==. objectiveTeamId objective] []
+    case members of
+        [] -> redirect (TeamR $ objectiveTeamId objective)
+        _ -> do
+            runDB $ delete objectiveId
+            redirect (TeamR $ objectiveTeamId objective)
+
 getResultsR :: ObjectiveId -> Handler Value
 getResultsR objectiveId = do
     addHeader (pack "Access-Control-Allow-Origin") (pack "*")
