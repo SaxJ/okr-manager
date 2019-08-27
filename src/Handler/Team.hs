@@ -6,11 +6,9 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Handler.Team where
 
-import Database.Persist.Sql (fromSqlKey)
 import Import
 import Data.Maybe (fromMaybe)
 import Yesod.Form.Bootstrap3
-import qualified Data.List as L
 import qualified Handler.Objectives as OH
 
 getTeamR :: TeamId -> Handler Html
@@ -37,8 +35,8 @@ getTeamR teamId = do
 
 postTeamR :: TeamId -> Handler Html
 postTeamR teamId = do
-    (userId, user) <- requireAuthPair
-    ((result, formWidget), formEnctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm teamMemberForm
+    _ <- requireAuthPair
+    ((result, _), _) <- runFormPost $ renderBootstrap3 BootstrapBasicForm teamMemberForm
 
     case result of
         FormSuccess formInput -> do
@@ -53,8 +51,8 @@ postTeamR teamId = do
 deleteTeamMemberR :: TeamMemberId -> Handler Value
 deleteTeamMemberR memberId = do
     (userId, user) <- requireAuthPair
-    member <- runDB $ get404 memberId
-    let teamId = teamMemberTeamId member
+    teamMember <- runDB $ get404 memberId
+    let teamId = teamMemberTeamId teamMember
     isMember <- isMemberOf userId teamId
     let canWrite = userAdmin user || isMember
     case canWrite of
@@ -70,8 +68,8 @@ getTeamObjectivesR teamId = do
 
 postTeamObjectivesR :: TeamId -> Handler Html
 postTeamObjectivesR teamId = do
-    (userId, user) <- requireAuthPair
-    ((result, formWidget), formEnctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm addObjectiveForm
+    _ <- requireAuthPair
+    ((result, _), _) <- runFormPost $ renderBootstrap3 BootstrapBasicForm addObjectiveForm
 
     case result of
         FormSuccess formInput -> do

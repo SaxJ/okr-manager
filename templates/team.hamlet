@@ -19,6 +19,10 @@
             <ul .list-group>
                 $forall o <- objectives
                     <li .list-group-item.card>
+                        <form method=post action=@{ObjectiveR $ entityKey o}?_method=DELETE>
+                            <button .close>
+                                <span .close aria-label=Close style="color: red;">
+                                    <span aria-hidden="true">&times;</span>
                         <h3 .card-title>
                             #{objectiveName $ entityVal o}
                         <span .card-body>
