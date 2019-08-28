@@ -1,0 +1,13 @@
+<div .ui.container>
+    <h1>#{objectiveName objective}
+        <small style="margin-left: 20px;">#{objectiveDescription objective}</small>
+    <hr>
+    $if length results > 0
+        <h3>Key Results
+        <ul .list-group>
+            $forall r <- results
+                <li .list-group-item.card>
+                    <h4 .card-title>
+                        #{resultName $ entityVal r}
+                    <p .card-body>
+                        #{resultDescription $ entityVal r}
