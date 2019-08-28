@@ -1,35 +1,31 @@
-
 <!-- Static navbar -->
-<nav .navbar.navbar-default.navbar-static-top>
+<nav .navbar.navbar-expand-lg.navbar-dark.bg-primary>
     <div .container>
-        <div .navbar-header>
-            <button type="button" .navbar-toggle.collapsed data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+        <a .navbar-brand href="/">OKR
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
 
         <div #navbar .collapse.navbar-collapse>
-            <ul .nav.navbar-nav>
+            <ul .navbar-nav>
                 $forall MenuItem label route _ <- navbarLeftFilteredMenuItems
-                    <li :Just route == mcurrentRoute:.active>
-                        <a href="@{route}">#{label}
+                    <li :Just route == mcurrentRoute:.active .nav-item>
+                        <a href="@{route}" .nav-link>#{label}
 
             <ul .nav.navbar-nav.navbar-right>
                 $forall MenuItem label route _ <- navbarRightFilteredMenuItems
-                    <li :Just route == mcurrentRoute:.active>
-                        <a href="@{route}">#{label}
+                    <li :Just route == mcurrentRoute:.active .nav-item>
+                        <a href="@{route}" .nav-link>#{label}
 
 <!-- Page Contents -->
 
 <div .container>
     $if not $ Just HomeR == mcurrentRoute
-        <ul .breadcrumb>
+        <ol .breadcrumb>
             $forall bc <- parents
-                <li>
+                <li .breadcrumb-item>
                     <a href="@{fst bc}">#{snd bc}
 
-            <li .active>#{title}
+            <li .active.breadcrumb-item>#{title}
 
     $maybe msg <- mmsg
       <div .alert.alert-info #message>#{msg}
