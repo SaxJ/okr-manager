@@ -2,7 +2,7 @@
     <h1>#{teamName team}
     <hr>
     $if not $ null members
-        <div .card>
+        <div>
             <h3>Team Members
             <ul .list-group>
                 $forall m <- members
@@ -15,18 +15,20 @@
                             #{teamMemberName $ entityVal m}
                             <small>
                                 #{fromMaybe "" $  teamMemberDescription $ entityVal m}
-            <h3>Objectives
+
+
+            <h3>Objectivez
             <ul .list-group>
                 $forall o <- objectives
-                    <li .list-group-item.card>
+                    <li .list-group-item>
                         <form method=post action=@{ObjectiveR $ entityKey o}?_method=DELETE>
                             <button .close>
                                 <span .close aria-label=Close style="color: red;">
                                     <span aria-hidden="true">&times;</span>
                         <a href=@{ObjectiveR $ entityKey o}>
-                            <h3 .card-title>
+                            <h3>
                                 #{objectiveName $ entityVal o}
-                        <span .card-body>
+                        <span>
                             <p>
                                 #{objectiveDescription $ entityVal o}
                             <ul .list-group.list-group-flush>
