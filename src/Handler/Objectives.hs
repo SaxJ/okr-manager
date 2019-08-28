@@ -6,11 +6,8 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Handler.Objectives where
 
-import Database.Persist.Sql (fromSqlKey)
 import Import
-import Data.Maybe (fromMaybe)
 import Yesod.Form.Bootstrap3
-import qualified Data.List as L
 
 getObjectivesR :: Handler Value
 getObjectivesR = do
@@ -23,14 +20,18 @@ postObjectivesR = do
     inserted <- runDB $ insertEntity objective
     returnJson inserted
 
-getObjectiveR :: ObjectiveId -> Handler Value
+getObjectiveR :: ObjectiveId -> Handler Html
 getObjectiveR objectiveId = do
+    _ <- requireAuthPair
     objective <- runDB $ get404 objectiveId
-    returnJson objective
+    results <- runDB $ selectList [ResultObjectiveId ==. objectiveId] []
+
+    defaultLayout $ do
+        $(widgetFile "objective")
 
 deleteObjectiveR :: ObjectiveId -> Handler Value
 deleteObjectiveR objectiveId = do
-    (userId, user) <- requireAuthPair
+    (userId, _) <- requireAuthPair
     objective <- runDB $ get404 objectiveId
 
     members <- runDB $ selectList [TeamMemberUserId ==. userId, TeamMemberTeamId ==. objectiveTeamId objective] []

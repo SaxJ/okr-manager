@@ -32,8 +32,10 @@ treeWidget tree@(Tree tm tms) =
     [whamlet|
         <ul .list-group #team-list>
             <li .list-group-item>
-                <span data-team="#{fromSqlKey $ entityKey tm}" type="submit" class="close #{deleteFormClass}" aria-label="Close" style="color: red;">
-                    <span aria-hidden="true">&times;</span>
+                <form method=post action=@{TeamR $ entityKey tm}?_method=DELETE>
+                    <button .close>
+                        <span .close aria-label=Close style="color: red;">
+                            <span aria-hidden="true">&times;</span>
                 <div .card>
                     <a href="@{TeamR $ entityKey tm}">
                         <h3 .card-title>

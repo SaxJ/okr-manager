@@ -33,7 +33,7 @@
                             $forall r <- groupResults o
                                 <li .list-group-item style="padding-left: 30px;">
                                     #{resultName $ entityVal r}
-                            <li .list-group-item.hidden>
+                            <li .list-group-item>
                                 <form .form-horizontal method=post action=@{ResultsR $ entityKey o}>
                                     ^{addResultFormWidget}
                                     <button .btn.btn-primary type="submit">

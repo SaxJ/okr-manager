@@ -48,6 +48,12 @@ postTeamR teamId = do
 
     redirect $ TeamR teamId
 
+deleteTeamR :: TeamId -> Handler Value
+deleteTeamR teamId = do
+    _ <- requireAuthPair
+    runDB $ delete teamId
+    redirect AdminR
+
 deleteTeamMemberR :: TeamMemberId -> Handler Value
 deleteTeamMemberR memberId = do
     (userId, user) <- requireAuthPair
