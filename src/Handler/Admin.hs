@@ -8,9 +8,9 @@ module Handler.Admin where
 
 import Database.Persist.Sql (fromSqlKey)
 import Import
-import Yesod.Form.Bootstrap3
 import Data.Maybe (fromMaybe)
 import qualified Data.List as L
+import Yesod.Form.Bootstrap4
 
 data Tree = Empty | Tree (Entity Team) [Tree]
 
@@ -66,7 +66,7 @@ teamForm = TeamForm
 getAdminR :: Handler Html
 getAdminR = do
     (_, _) <- requireAuthPair
-    ((result, formWidget), formEnctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm teamForm
+    ((result, formWidget), formEnctype) <- runFormPost $ renderBootstrap4 BootstrapBasicForm teamForm
 
     case result of
         FormSuccess formInput -> do

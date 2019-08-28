@@ -6,7 +6,7 @@
 module Handler.Home where
 
 import Import
-import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3)
+import Yesod.Form.Bootstrap4 (BootstrapFormLayout (..), renderBootstrap4)
 import Text.Julius (RawJS (..))
 
 -- Define our data that will be used for creating the form.
@@ -51,7 +51,7 @@ postHomeR = do
         $(widgetFile "homepage")
 
 sampleForm :: Form FileForm
-sampleForm = renderBootstrap3 BootstrapBasicForm $ FileForm
+sampleForm = renderBootstrap4 BootstrapBasicForm $ FileForm
     <$> fileAFormReq "Choose a file"
     <*> areq textField textSettings Nothing
     -- Add attributes like the placeholder and CSS classes.

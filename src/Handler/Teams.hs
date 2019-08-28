@@ -9,7 +9,7 @@ module Handler.Teams where
 import Database.Persist.Sql (fromSqlKey)
 import Import
 import Data.Maybe (fromMaybe)
-import Yesod.Form.Bootstrap3
+import Yesod.Form.Bootstrap4
 import qualified Data.List as L
 
 getTeamsR :: Handler Value

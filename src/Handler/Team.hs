@@ -8,16 +8,16 @@ module Handler.Team where
 
 import Import
 import Data.Maybe (fromMaybe)
-import Yesod.Form.Bootstrap3
 import qualified Handler.Objectives as OH
+import Yesod.Form.Bootstrap4
 
 getTeamR :: TeamId -> Handler Html
 getTeamR teamId = do
     (userId, user) <- requireAuthPair
 
-    (memberFormWidget, _) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm teamMemberForm
-    (objectiveFormWidget, _) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm addObjectiveForm
-    (addResultFormWidget, _) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm OH.addResultForm
+    (memberFormWidget, _) <- generateFormPost $ renderBootstrap4 BootstrapBasicForm teamMemberForm
+    (objectiveFormWidget, _) <- generateFormPost $ renderBootstrap4 BootstrapBasicForm addObjectiveForm
+    (addResultFormWidget, _) <- generateFormPost $ renderBootstrap4 BootstrapBasicForm OH.addResultForm
 
     team <- runDB $ get404 teamId
     objectives <- runDB $ selectList [ObjectiveTeamId ==. teamId] []
@@ -36,7 +36,7 @@ getTeamR teamId = do
 postTeamR :: TeamId -> Handler Html
 postTeamR teamId = do
     _ <- requireAuthPair
-    ((result, _), _) <- runFormPost $ renderBootstrap3 BootstrapBasicForm teamMemberForm
+    ((result, _), _) <- runFormPost $ renderBootstrap4 BootstrapBasicForm teamMemberForm
 
     case result of
         FormSuccess formInput -> do
@@ -75,7 +75,7 @@ getTeamObjectivesR teamId = do
 postTeamObjectivesR :: TeamId -> Handler Html
 postTeamObjectivesR teamId = do
     _ <- requireAuthPair
-    ((result, _), _) <- runFormPost $ renderBootstrap3 BootstrapBasicForm addObjectiveForm
+    ((result, _), _) <- runFormPost $ renderBootstrap4 BootstrapBasicForm addObjectiveForm
 
     case result of
         FormSuccess formInput -> do

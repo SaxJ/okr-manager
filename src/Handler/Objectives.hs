@@ -7,7 +7,7 @@
 module Handler.Objectives where
 
 import Import
-import Yesod.Form.Bootstrap3
+import Yesod.Form.Bootstrap4
 
 getObjectivesR :: Handler Value
 getObjectivesR = do
@@ -50,7 +50,7 @@ getResultsR objectiveId = do
 postResultsR :: ObjectiveId -> Handler Html
 postResultsR objId = do
     (_, _) <- requireAuthPair
-    ((result, _), _) <- runFormPost $ renderBootstrap3 BootstrapBasicForm addResultForm
+    ((result, _), _) <- runFormPost $ renderBootstrap4 BootstrapBasicForm addResultForm
     objective <- runDB $ get404 objId
 
     case result of

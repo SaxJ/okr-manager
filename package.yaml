@@ -45,6 +45,7 @@ dependencies:
 - case-insensitive
 - wai
 - foreign-store
+- yesod-form-bootstrap4
 
 # The library contains all of our application code. The executable
 # defined below is just a thin wrapper.
