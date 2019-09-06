@@ -1,56 +1,53 @@
 <div .ui.container>
     <h1>#{teamName team}
     <hr>
-    $if not $ null members
-        <div>
-            <h3>Team Members
-            <ul .list-group>
-                $forall m <- members
-                    <li .list-group-item>
-                        <form method=post action=@{TeamMemberR $ entityKey m}?_method=DELETE>
-                            <button .close>
-                                <span .close aria-label=Close style="color: red;">
-                                    <span aria-hidden="true">&times;</span>
-                        <h5>
-                            #{teamMemberName $ entityVal m}
-                            <small>
-                                #{fromMaybe "" $  teamMemberDescription $ entityVal m}
-
-
-            <h3>Objectivez
-            <ul .list-group>
-                $forall o <- objectives
-                    <li .list-group-item>
-                        <form method=post action=@{ObjectiveR $ entityKey o}?_method=DELETE>
-                            <button .close>
-                                <span .close aria-label=Close style="color: red;">
-                                    <span aria-hidden="true">&times;</span>
-                        <a href=@{ObjectiveR $ entityKey o}>
-                            <h3>
-                                #{objectiveName $ entityVal o}
-                        <span>
-                            <p>
-                                #{objectiveDescription $ entityVal o}
-                            <ul .list-group.list-group-flush>
-                            $forall r <- groupResults o
-                                <li .list-group-item style="padding-left: 30px;">
-                                    #{resultName $ entityVal r}
-                            <li .list-group-item>
-                                <form .form-horizontal method=post action=@{ResultsR $ entityKey o}>
-                                    ^{addResultFormWidget}
-                                    <button .btn.btn-primary type="submit">
-                                        Add Key Result
+        <ul .list-group>
+            $forall o <- objectives
+                <li .list-group-item>
+                    <form method=post action=@{ObjectiveR $ entityKey o}?_method=DELETE>
+                        <button .close>
+                            <span .close aria-label=Close style="color: red;">
+                                <span aria-hidden="true">&times;</span>
+                    <a href=@{ObjectiveR $ entityKey o}>
+                        <h3>
+                            #{objectiveName $ entityVal o}
+                    <span>
+                        <p>
+                            #{objectiveDescription $ entityVal o}
+                        <ul .list-group.list-group-flush>
+                        $forall r <- groupResults o
+                            <li .list-group-item style="padding-left: 30px;">
+                                #{resultName $ entityVal r}
+                        <li .list-group-item>
+                            <form .form-horizontal method=post action=@{ResultsR $ entityKey o}>
+                                ^{addResultFormWidget}
+                                <button .btn.btn-primary type="submit">
+                                    Add Key Result
 
     $if isAdmin || isMember
-        <hr>
-        <form .form-horizontal method=post action=@{TeamObjectivesR teamId}>
-            ^{objectiveFormWidget}
-            <button .btn.btn-primary type="submit">
-                Add Objective
+        <div style="margin-top: 30px;">
+            <form .form-horizontal method=post action=@{TeamObjectivesR teamId}>
+                ^{objectiveFormWidget}
+                <button .btn.btn-primary type="submit">
+                    Add Objective
 
     $if isAdmin
         <hr>
         <h1 style="margin-top: 100px;">Admin
+        $if not $ null members
+            <div style="margin-bottom: 30px;">
+                <h3>Team Members
+                <ul .list-group.list-group-flush>
+                    $forall m <- members
+                        <li .list-group-item>
+                            <form method=post action=@{TeamMemberR $ entityKey m}?_method=DELETE>
+                                <button .close>
+                                    <span .close aria-label=Close style="color: red;">
+                                        <span aria-hidden="true">&times;</span>
+                            <h5>
+                                #{teamMemberName $ entityVal m}
+                                <small>
+                                    #{fromMaybe "" $  teamMemberDescription $ entityVal m}
         <form .form-horizontal method=post action=@{TeamR teamId}>
             ^{memberFormWidget}
             <button .btn.btn-primary type="submit">
