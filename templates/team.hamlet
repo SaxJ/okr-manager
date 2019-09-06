@@ -17,6 +17,10 @@
                         <ul .list-group.list-group-flush>
                         $forall r <- groupResults o
                             <li .list-group-item style="padding-left: 30px;">
+                                <form method=post action=@{ResultR $ entityKey r}?_method=DELETE>
+                                    <button .close>
+                                        <span .close aria-label=Close style="color: red;">
+                                            <span aria-hidden="true">&times;</span>
                                 #{resultName $ entityVal r}
                         <li .list-group-item>
                             <form .form-horizontal method=post action=@{ResultsR $ entityKey o}>

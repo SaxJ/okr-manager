@@ -6,8 +6,11 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Handler.Result where
 
-import Database.Persist.Sql (fromSqlKey)
 import Import
-import Data.Maybe (fromMaybe)
-import Yesod.Form.Bootstrap4
-import qualified Data.List as L
+
+deleteResultR :: ResultId -> Handler Value
+deleteResultR resultId = do
+    result <- runDB $ get404 resultId
+    objective <- runDB $ get404 (resultObjectiveId result)
+    runDB $ delete resultId
+    redirect (TeamR (objectiveTeamId objective))

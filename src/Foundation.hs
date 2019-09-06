@@ -185,6 +185,7 @@ instance Yesod App where
     isAuthorized (ObjectiveR _) _ = return Authorized
     isAuthorized (ResultsR _) _ = return Authorized
     isAuthorized EditableR _ = return Authorized
+    isAuthorized (ResultR _) _ = return Authorized
 
     -- the profile route requires that the user is authenticated, so we
     -- delegate to that function
