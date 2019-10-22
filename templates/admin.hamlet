@@ -1,5 +1,5 @@
 <div .ui.container>
-    <h1>Admin
+    <h1>Teams Admin
     ^{treeWidget teamTree}
     <form .form-horizontal method=post action=@{AdminR} enctype=#{formEnctype}>
         ^{formWidget}

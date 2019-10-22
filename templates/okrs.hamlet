@@ -1,20 +1,21 @@
 <div .ui.container>
     <h1>My OKRs
-    <ul .list-group #team-list>
+    <ul .list-group.list-group-flush>
     $forall (team, group) <- paired
         <li .list-group-item>
-            <div .card>
+            <div>
                 <a href=@{TeamR $ entityKey team}>
-                    <h3 .card-title>
+                    <h3>
                         #{teamName $ entityVal team}
-                    <p .card-body>
+                    <p>
                         #{fromJust $ teamDescription $ entityVal team}
                 <ul .list-group.list-group-flush>
                     $forall (o, rs) <- group
-                        <li>
-                            <div .objectiveTitle>
+                        <li .list-group-item>
+                            <h3>
                                 #{objectiveName $ entityVal o}
-                                <meter>
+                                <div .progress>
+                                    <div .progress-bar.progress-bar-striped style="width: 30%;" role=progressbar aria-valuenow=30 aria-valuemin=0 aria-valuemax=100>
                             <ul>
                                 $forall r <- rs
                                     <li>#{resultName $ entityVal r}

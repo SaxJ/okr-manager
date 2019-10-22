@@ -30,17 +30,17 @@ hasChildren (Tree _ xs) = not $ null xs
 treeWidget Empty = [whamlet|<h1>Nothing!|]
 treeWidget tree@(Tree tm tms) =
     [whamlet|
-        <ul .list-group #team-list>
+        <ul .list-group.list-group-flush>
             <li .list-group-item>
                 <form method=post action=@{TeamR $ entityKey tm}?_method=DELETE>
                     <button .close>
                         <span .close aria-label=Close style="color: red;">
                             <span aria-hidden="true">&times;</span>
-                <div .card>
+                <div>
                     <a href="@{TeamR $ entityKey tm}">
-                        <h3 .card-title>
+                        <h3>
                             #{teamName $ entityVal tm}
-                        <p .card-body>
+                        <p>
                             #{fromMaybe "" $ teamDescription $ entityVal tm}
             $if hasChildren tree
                 <li .list-group-item #team-list>
