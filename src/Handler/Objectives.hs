@@ -55,7 +55,7 @@ postResultsR objId = do
 
     case result of
         FormSuccess formInput -> do
-            let ent = Result (resultName' formInput) (resultDescription' formInput) False objId
+            let ent = Result (resultName' formInput) (resultDescription' formInput) False 0 objId
             _ <- runDB $ insertUnique ent
             return ()
         _ -> return ()

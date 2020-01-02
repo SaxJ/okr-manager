@@ -42,6 +42,7 @@ Result json
     name Text
     description Text
     done Bool
+    colour Int
     objectiveId ObjectiveId
 ObjectiveLink json
     from ObjectiveId
