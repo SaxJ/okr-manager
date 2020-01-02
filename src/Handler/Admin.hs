@@ -6,7 +6,6 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Handler.Admin where
 
-import Database.Persist.Sql (fromSqlKey)
 import Import
 import Data.Maybe (fromMaybe)
 import qualified Data.List as L
@@ -27,6 +26,7 @@ hasChildren :: Tree -> Bool
 hasChildren Empty = False
 hasChildren (Tree _ xs) = not $ null xs
 
+treeWidget :: Tree -> WidgetT App m ()
 treeWidget Empty = [whamlet|<h1>Nothing!|]
 treeWidget tree@(Tree tm tms) =
     [whamlet|

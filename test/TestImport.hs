@@ -83,6 +83,7 @@ createUser ident = runDB $ do
     user <- insertEntity User
         { userIdent = ident
         , userPassword = Nothing
+        , userAdmin = False
         }
     _ <- insert Email
         { emailEmail = ident
