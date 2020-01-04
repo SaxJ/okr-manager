@@ -30,3 +30,5 @@
 
 /user/objectives EditableR GET POST
 /team_member/#TeamMemberId TeamMemberR DELETE
+
+/teams/#TeamId/check-in CheckInR GET POST DELETE

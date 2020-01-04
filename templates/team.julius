@@ -1,0 +1,8 @@
+function toggleAdminSection(event) {
+    var el = document.getElementById('admin-section');
+    if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+    } else {
+        el.classList.add('hidden');
+    }
+}

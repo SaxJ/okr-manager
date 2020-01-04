@@ -1,0 +1,14 @@
+.hidden {
+    display: none;
+}
+
+h1 > span {
+    color: #919aa1;
+    font-size: 15px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+h1 > span:hover {
+    text-decoration: underline;
+}

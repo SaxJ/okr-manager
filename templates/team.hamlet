@@ -1,5 +1,8 @@
 <div .ui.container>
     <h1>#{teamName team}
+        <span>
+            <a href=@{CheckInR teamId}>
+                Check-In
     <hr>
         <ul .list-group>
             $forall o <- objectives
@@ -37,22 +40,23 @@
 
     $if isAdmin
         <hr>
-        <h1 style="margin-top: 100px;">Admin
-        $if not $ null members
-            <div style="margin-bottom: 30px;">
-                <h3>Team Members
-                <ul .list-group.list-group-flush>
-                    $forall m <- members
-                        <li .list-group-item>
-                            <form method=post action=@{TeamMemberR $ entityKey m}?_method=DELETE>
-                                <button .close>
-                                    <span .close aria-label=Close style="color: red;">
-                                        <span aria-hidden="true">&times;</span>
-                            <h5>
-                                #{teamMemberName $ entityVal m}
-                                <small>
-                                    #{fromMaybe "" $  teamMemberDescription $ entityVal m}
-        <form .form-horizontal method=post action=@{TeamR teamId}>
-            ^{memberFormWidget}
-            <button .btn.btn-primary type="submit">
-                Add Team Member
+        <h1 style="margin-top: 100px;" onclick="toggleAdminSection()">Admin
+        <div #admin-section .hidden>
+            $if not $ null members
+                <div style="margin-bottom: 30px;">
+                    <h3>Team Members
+                    <ul .list-group.list-group-flush>
+                        $forall m <- members
+                            <li .list-group-item>
+                                <form method=post action=@{TeamMemberR $ entityKey m}?_method=DELETE>
+                                    <button .close>
+                                        <span .close aria-label=Close style="color: red;">
+                                            <span aria-hidden="true">&times;</span>
+                                <h5>
+                                    #{teamMemberName $ entityVal m}
+                                    <small>
+                                        #{fromMaybe "" $  teamMemberDescription $ entityVal m}
+            <form .form-horizontal method=post action=@{TeamR teamId}>
+                ^{memberFormWidget}
+                <button .btn.btn-primary type="submit">
+                    Add Team Member

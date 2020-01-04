@@ -47,3 +47,8 @@ Result json
 ObjectiveLink json
     from ObjectiveId
     to ObjectiveId
+CheckIn json
+    date Text
+    colour Int
+    note Text Maybe
+    resultId ResultId
