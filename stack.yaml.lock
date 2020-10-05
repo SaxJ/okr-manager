@@ -5,15 +5,15 @@
 
 packages:
 - completed:
-    hackage: yesod-markdown-0.12.6.2@sha256:c0be0f1d1e2df073935bd1f6386d814c686be1a14cf6538de1ca09ac882b393c,1737
+    hackage: yesod-auth-oauth2-0.6.1.5@sha256:bc65e697ae622b80024ca22a7b9270bf64a8c96be8f6ac1d09ed3a1d1cbbde6e,2950
     pantry-tree:
-      size: 376
-      sha256: 96aad48757b8f898ff3fa495f0284a296dbcfccf51573292338e9139fc561cdb
+      size: 1844
+      sha256: 314407a32db4ef4a0bed6991f2b3a4ac9d4636984c5449d9e64b30c6b7961a46
   original:
-    hackage: yesod-markdown-0.12.6.2
+    hackage: yesod-auth-oauth2-0.6.1.5
 snapshots:
 - completed:
-    size: 502348
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/12/5.yaml
-    sha256: 3cb9dcb1e53145c4340978562f6b29d0ce1c35ddd912085cc1b6db94d4e0cdde
-  original: lts-12.5
+    size: 532386
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/16/17.yaml
+    sha256: d3ee1ae797cf63189c95cf27f00700304946c5cb3c1e6a82001cd6584a221e1b
+  original: lts-16.17
