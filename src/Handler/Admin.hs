@@ -6,30 +6,29 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Handler.Admin where
 
-import Import
-import Data.Maybe (fromMaybe)
-import qualified Data.List as L
-import Yesod.Form.Bootstrap4
+import           Import
+import           Data.Maybe                     ( fromMaybe )
+import qualified Data.List                     as L
+import           Yesod.Form.Bootstrap4
 
 data Tree = Empty | Tree (Entity Team) [Tree]
 
 teamsToTree :: [Entity Team] -> Entity Team -> Tree
-teamsToTree [] _ = Empty
+teamsToTree []    _ = Empty
 teamsToTree teams t = Tree t $ map (teamsToTree teams) xs
-    where
-        xs = [a | a <- teams, (teamParent $ entityVal a) == (Just $ entityKey t)]
+ where
+  xs = [ a | a <- teams, (teamParent $ entityVal a) == (Just $ entityKey t) ]
 
 deleteFormClass :: String
 deleteFormClass = "team-delete"
 
 hasChildren :: Tree -> Bool
-hasChildren Empty = False
+hasChildren Empty       = False
 hasChildren (Tree _ xs) = not $ null xs
 
 treeWidget :: Tree -> WidgetT App m ()
 treeWidget Empty = [whamlet|<h1>Nothing!|]
-treeWidget tree@(Tree tm tms) =
-    [whamlet|
+treeWidget tree@(Tree tm tms) = [whamlet|
         <ul .list-group.list-group-flush>
             <li .list-group-item>
                 <form method=post action=@{TeamR $ entityKey tm}?_method=DELETE>
@@ -56,35 +55,40 @@ data TeamForm = TeamForm
     }
 
 teamForm :: AForm Handler TeamForm
-teamForm = TeamForm
+teamForm =
+  TeamForm
     <$> areq textField (bfs ("Name" :: Text)) Nothing
-    <*> aopt textField (bfs ("Description" :: Text)) Nothing
+    <*> aopt textField                 (bfs ("Description" :: Text)) Nothing
     <*> aopt (selectField teamOptions) (bfs ("Parent Team" :: Text)) Nothing
-    where
-        teamOptions = optionsPersist [] [Asc TeamName] teamName
+  where teamOptions = optionsPersist [] [Asc TeamName] teamName
 
 getAdminR :: Handler Html
 getAdminR = do
-    (_, _) <- requireAuthPair
-    ((result, formWidget), formEnctype) <- runFormPost $ renderBootstrap4 BootstrapBasicForm teamForm
+  (_                   , _          ) <- requireAuthPair
+  ((result, formWidget), formEnctype) <- runFormPost
+    $ renderBootstrap4 BootstrapBasicForm teamForm
 
-    case result of
-        FormSuccess formInput -> do
-            let ent = Team (teamName' formInput) (teamDescription' formInput) (entityKey <$> parent' formInput)
-            _ <- runDB $ insertUnique ent
-            return ()
-        _ -> return ()
+  case result of
+    FormSuccess formInput -> do
+      let ent = Team (teamName' formInput)
+                     (teamDescription' formInput)
+                     (entityKey <$> parent' formInput)
+      _ <- runDB $ insertUnique ent
+      return ()
+    _ -> return ()
 
-    allTeams <- runDB $ selectList [] [Asc TeamName]
-    let teamTree = teamsToTree allTeams $ L.head $ filter (isNothing . teamParent . entityVal) allTeams
-    defaultLayout $ do
-        $(widgetFile "admin")
+  allTeams <- runDB $ selectList [] [Asc TeamName]
+  let teamTree = teamsToTree allTeams $ L.head $ filter
+        (isNothing . teamParent . entityVal)
+        allTeams
+  defaultLayout $ do
+    $(widgetFile "admin")
 
 postAdminR :: Handler Html
 postAdminR = getAdminR
 
 deleteAdminTeamR :: TeamId -> Handler Value
 deleteAdminTeamR teamId = do
-    _ <- runDB $ get404 teamId
-    runDB $ delete teamId
-    redirect AdminR
+  _ <- runDB $ get404 teamId
+  runDB $ delete teamId
+  redirect AdminR
