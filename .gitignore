@@ -21,3 +21,5 @@ cabal.sandbox.config
 *~
 \#*
 okr-manager.cabal
+obj
+bin
