@@ -1,64 +1,85 @@
-<div .ui.container>
-    <h1>#{teamName team}
-        <span>
-            <a href=@{CheckInR teamId}>
-                Check-In
-    <hr>
-        <ul .list-group>
+<div .container>
+    <h2 .nav-item>#{teamName team}
+    <nav .nav.nav-tabs>
+        <a #home-tab .nav-item.nav-link data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
+            Objectives
+        $if isAdmin
+            <a #members-tab .nav-item.nav-link data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="false">
+                Team Members
+    <div .tab-content>
+        <div .tab-pane.active.card id="home" role="tabpanel" aria-labelledby="home-tab">
             $forall o <- objectives
-                <li .list-group-item>
-                    <form method=post action=@{ObjectiveR $ entityKey o}?_method=DELETE>
-                        <button .close>
-                            <span .close aria-label=Close style="color: red;">
-                                <span aria-hidden="true">&times;</span>
-                    <a href=@{ObjectiveR $ entityKey o}>
-                        <h3>
-                            #{objectiveName $ entityVal o}
-                    <span>
-                        <p>
-                            #{objectiveDescription $ entityVal o}
-                        <ul .list-group.list-group-flush>
-                        $forall r <- groupResults o
-                            <li .list-group-item style="padding-left: 30px;">
-                                <form method=post action=@{ResultR $ entityKey r}?_method=DELETE>
-                                    <button .close>
-                                        <span .close aria-label=Close style="color: red;">
-                                            <span aria-hidden="true">&times;</span>
-                                #{resultName $ entityVal r}
-                        <li .list-group-item>
-                            <form .form-horizontal method=post action=@{ResultsR $ entityKey o}>
-                                ^{addResultFormWidget}
-                                <button .btn.btn-primary type="submit">
-                                    Add Key Result
+                <div .row style="margin: 5px 0 5px 0;">
+                    <div .card>
+                        <div .card-body>
+                            <div .card-title>
+                                <a href=@{ObjectiveR $ entityKey o}>
+                                    <h2>
+                                        #{objectiveName $ entityVal o}
+                            <div .card-subtitle>
+                                #{objectiveDescription $ entityVal o}
+                            <div .col>
+                                $forall r <- groupResults o
+                                    <div .row style="margin: 5px 0 5px 0;">
+                                        <div .card>
+                                            <div .card-body>
+                                                <div .card-title>
+                                                    #{resultName $ entityVal r}
+                                            <div .card-footer>
+                                                <form method=post action=@{ResultR $ entityKey r}?_method=DELETE>
+                                                    <button .btn.btn-danger>
+                                                        Remove Key Result
+                                <div .row style="margin: 5px 0 5px 0;">
+                                    <div .card.border-success>
+                                        <div .card-header>
+                                            Add a Key Result
+                                        <div .card-body>
+                                            <form .form-horizontal method=post action=@{ResultsR $ entityKey o}>
+                                                ^{addResultFormWidget}
+                                                <button .btn.btn-primary type="submit">
+                                                    Add Key Result
+                        <div .card-footer>
+                            <form method=post action=@{ObjectiveR $ entityKey o}?_method=DELETE>
+                                <button .btn.btn-danger>
+                                    Remove Objective
+            <div .row style="margin: 5px 0 5px 0;">
+                <div .card.border-success style="margin-top: 30px;">
+                    <div .card-body>
+                        <form .form-horizontal method=post action=@{TeamObjectivesR teamId}>
+                            ^{objectiveFormWidget}
+                            <button .btn.btn-primary type="submit">
+                                Add Objective
 
-    $if isAdmin || isMember
-        <div style="margin-top: 30px;">
-            <form .form-horizontal method=post action=@{TeamObjectivesR teamId}>
-                ^{objectiveFormWidget}
-                <button .btn.btn-primary type="submit">
-                    Add Objective
-
-    $if isAdmin
-        <hr>
-        <h1 style="margin-top: 100px;" onclick="toggleAdminSection()">Team Management
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#admin-section" aria-expanded="false" aria-controls="admin-section">
-            Toggler
-        <div #admin-section .collapse>
-            $if not $ null members
-                <div style="margin-bottom: 30px;">
-                    <h3>Team Members
-                    <ul .list-group.list-group-flush>
+        <div .tab-pane.card id="members" role="tabpanel" aria-labelledby="members-tab">
+            <div #admin-section.card-body>
+                <div .card-title>
+                    Manage Team Members
+                <div .card-subtitle>
+                    Add users to teams.
+                <div .col>
+                    $if not $ null members
                         $forall m <- members
-                            <li .list-group-item>
-                                <form method=post action=@{TeamMemberR $ entityKey m}?_method=DELETE>
-                                    <button .close>
-                                        <span .close aria-label=Close style="color: red;">
-                                            <span aria-hidden="true">&times;</span>
-                                <h5>
-                                    #{teamMemberName $ entityVal m}
-                                    <small>
-                                        #{fromMaybe "" $  teamMemberDescription $ entityVal m}
-            <form .form-horizontal method=post action=@{TeamR teamId}>
-                ^{memberFormWidget}
-                <button .btn.btn-primary type="submit">
-                    Add Team Member
+                            <div .row>
+                                <div .card>
+                                    <div .card-body>
+                                        <div .card-title>
+                                            #{teamMemberName $ entityVal m}
+                                        <div .card-subtitle>
+                                            #{fromMaybe "" $  teamMemberDescription $ entityVal m}
+                                    <div .card-footer>
+                                        <form method=post action=@{TeamMemberR $ entityKey m}?_method=DELETE>
+                                            <button .btn.btn-danger>
+                                                Remove team member
+                    $else
+                        <div .row>
+                            <div .alert.alert-warning>
+                                No team members yet. Add somebody below.
+                    <div .row>
+                        <div .card.card-success>
+                            <div .card-body>
+                                <div .card-title>
+                                    Add a team member
+                                <form .form-horizontal method=post action=@{TeamR teamId}>
+                                    ^{memberFormWidget}
+                                    <button .btn.btn-primary type="submit">
+                                        Add Team Member

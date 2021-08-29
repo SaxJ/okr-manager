@@ -5,9 +5,7 @@
       <div .row>
         $forall tm <- allTeams
           ^{teamCard tm}
-
     <hr>
-
     <div .border-success.card>
       <div .card-body>
         <div .card-title>
