@@ -40,8 +40,10 @@
 
     $if isAdmin
         <hr>
-        <h1 style="margin-top: 100px;" onclick="toggleAdminSection()">Admin
-        <div #admin-section .hidden>
+        <h1 style="margin-top: 100px;" onclick="toggleAdminSection()">Team Management
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#admin-section" aria-expanded="false" aria-controls="admin-section">
+            Toggler
+        <div #admin-section .collapse>
             $if not $ null members
                 <div style="margin-bottom: 30px;">
                     <h3>Team Members

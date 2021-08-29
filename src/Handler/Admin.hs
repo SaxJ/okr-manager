@@ -26,6 +26,21 @@ hasChildren :: Tree -> Bool
 hasChildren Empty       = False
 hasChildren (Tree _ xs) = not $ null xs
 
+teamCard :: Entity Team -> WidgetT App m ()
+teamCard team = [whamlet|
+                        <div .card.col-md style="min-width: 300px; max-width: 300px; margin: 5px;">
+                          <a href="@{TeamR $ entityKey team}" style="color: var(--bs-body-color); text-decoration: none;">
+                            <div .card-body>
+                              <h4 .card-title>
+                                #{teamName $ entityVal team}
+                              <p .card-text>
+                                #{fromMaybe "" $ teamDescription $ entityVal team}
+                          <div .card-footer>
+                            <form method=post action=@{TeamR $ entityKey team}?_method=DELETE>
+                                <button .btn.btn-danger>
+                                  Delete
+                              |]
+
 treeWidget :: Tree -> WidgetT App m ()
 treeWidget Empty = [whamlet|<h1>Nothing!|]
 treeWidget tree@(Tree tm tms) = [whamlet|

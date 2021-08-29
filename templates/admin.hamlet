@@ -1,7 +1,19 @@
-<div .ui.container>
-    <h1>Teams Admin
-    ^{treeWidget teamTree}
-    <form .form-horizontal method=post action=@{AdminR} enctype=#{formEnctype}>
-        ^{formWidget}
-        <button .btn.btn-primary type="submit">
-            Create Team
+<div .container>
+    <h3>
+      Teams
+    <div .container>
+      <div .row>
+        $forall tm <- allTeams
+          ^{teamCard tm}
+
+    <hr>
+
+    <div .border-success.card>
+      <div .card-body>
+        <div .card-title>
+          <h3>
+            Add a team
+        <form .form-horizontal method=post action=@{AdminR} enctype=#{formEnctype}>
+            ^{formWidget}
+            <button .btn.btn-primary type="submit">
+                Create Team
