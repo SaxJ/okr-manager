@@ -6,3 +6,13 @@ function toggleAdminSection(event) {
         el.classList.add('hidden');
     }
 }
+
+$(function () {
+    var activeTab = $(`a[href$='${location.hash}']`);
+    activeTab && activeTab.tab('show');
+});
+
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    console.log(e.target.href)
+    location.href = e.target.href;
+});
