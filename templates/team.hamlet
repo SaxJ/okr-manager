@@ -1,13 +1,19 @@
 <div .container>
     <h2 .nav-item>#{teamName team}
     <nav .nav.nav-tabs>
-        <a #home-tab .nav-item.nav-link data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
-            Objectives
+        <a #checkin-tab .nav-item.nav-link data-toggle="tab" href="#checkin" role="tab" aria-controls="checkin" aria-selected="true">
+            Check-In
+        <a #objectives-tab .nav-item.nav-link data-toggle="tab" href="#objectives" role="tab" aria-controls="objectives" aria-selected="false">
+            Edit Objectives
         $if isAdmin
             <a #members-tab .nav-item.nav-link data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="false">
                 Team Members
     <div .tab-content>
-        <div .tab-pane.active.card id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div .tab-pane.active.card id="checkin" role="tabpanel" aria-labelledby="checkin-tab">
+            <div .card-body>
+                <div .card-title>
+                    Check-In
+        <div .tab-pane.card id="objectives" role="tabpanel" aria-labelledby="objectives-tab">
             $forall o <- objectives
                 <div .row style="margin: 5px 0 5px 0;">
                     <div .card>
